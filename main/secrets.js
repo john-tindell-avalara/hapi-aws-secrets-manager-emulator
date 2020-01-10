@@ -1,3 +1,6 @@
+const fs = require('fs');
+const config = require('./config');
+
 /**
  * @type {Object.<string, Secret>}
  */
@@ -10,6 +13,11 @@ const secrets = {};
 module.exports.save = function save(secret) {
     const key = secret.getLookupKey();
     secrets[key] = secret;
+    fs.writeFile(config.PRELOAD_DIRECTORY + '/db.txt', JSON.stringify(secrets, null, 4), function (err) {
+        if (err) 
+            return console.log(err);
+        console.log('secrest written to file');
+    })
 };
 
 
