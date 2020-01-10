@@ -42,6 +42,19 @@ function updateSecret(req, h) {
     return createSecretResult(secret);
 }
 
+function deleteSecret(req, h) {
+    console.log('deleting secret')
+    secrets.delete(req.payload.SecretId);
+
+    const secret = new Secret(
+        req.payload.SecretId,
+        req.payload.SecretString,
+        req.payload.SecretBinary
+    );
+
+    return createSecretResult(secret);
+}
+
 function createSecretResult(secret) {
     var result =  {
         "ARN": `arn:aws:secretsmanager:us-west-2:123456789012:secret:${secret.getName()}-a1b2c3`,
@@ -86,6 +99,8 @@ const register = async (server) => {
                         return createSecret(req, h);
                     case 'secretsmanager.updatesecret':
                         return updateSecret(req, h);
+                    case 'secretsmanager.deletesecret':
+                        return deleteSecret(req, h);
                     default:
                         throw new Error(`Unsupported target ${target}`);
                 }

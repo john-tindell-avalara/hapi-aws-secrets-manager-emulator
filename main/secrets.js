@@ -25,9 +25,11 @@ module.exports.save = function save(secret) {
  * Delete a secret
  * @param {string} key The key of the secret to delete
  */
-module.exports.delete = function deleteFn(key) {
-    if (secrets[key]) {
-        delete secrets[key];
+module.exports.delete = function deleteFn(name) {
+    for (let key in secrets) {
+        if (secrets[key].getName() === name) {
+            delete secrets[key];
+        }
     }
 };
 
